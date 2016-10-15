@@ -57,7 +57,6 @@ public class ThatOneAutonomousProgram extends LinearOpMode {
         robot.init(hardwareMap);
 
         //Send messages through telemetry
-        telemetry.addData("Status", "Initialization");
         telemetry.addData("Say", "Program is running!");
         telemetry.update();
 
@@ -72,6 +71,7 @@ public class ThatOneAutonomousProgram extends LinearOpMode {
         robot.goForward(1, 500);
 
         //OpMode won't function without the code below this comment, so don't remove it
+        //weouy
         idle();
     }
 }
