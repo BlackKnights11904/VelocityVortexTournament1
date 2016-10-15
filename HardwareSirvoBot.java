@@ -43,7 +43,7 @@ public class HardwareSirvoBot
 
     //Define left turn method
     public void turnLeft(int degreeOfTurn) {
-        int degrees = degreeOfTurn / 10 * 56;
+        int degrees = degreeOfTurn / 10 * 84;
         leftMotor.setPower(-0.1125);
         rightMotor.setPower(0.1125);
         waitTime(degrees);
@@ -53,7 +53,7 @@ public class HardwareSirvoBot
 
     //Define right turn method
     public void turnRight(int degreeOfTurn) {
-        int degrees = degreeOfTurn / 10 * 56;
+        int degrees = degreeOfTurn / 10 * 84;
         leftMotor.setPower(0.1125);
         rightMotor.setPower(-01125);
         waitTime(degrees);
