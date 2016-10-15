@@ -69,11 +69,13 @@ public class SirvoBotAutonomous extends LinearOpMode {
         waitForStart();
 
         //Start of the actual autonomous program, all your code to make the robot move goes here
-        robot.goForward(1, 2000);
+        robot.goForward(1, 1500);
         robot.stopMovement(0);
-        robot.waitTime(5000);
-        robot.turnRight(180);
-        robot.goForward(1, 2000);
+        robot.turnRight(90);
+        robot.goForward(1, 2500);
+        robot.turnRight(45);
+        robot.goForward(1, 1250);
+        robot.stopMovement(0);
 
         //OpMode won't function without the code below this comment, so don't remove it
         idle();

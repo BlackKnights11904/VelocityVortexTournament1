@@ -63,7 +63,7 @@ public class HardwareSirvoBot
 
     //Define go straight method
     public void goForward(double motorSpeed, int moveMilis) {
-        double actualSpeed = motorSpeed;
+        double actualSpeed = motorSpeed * 0.8;
         leftMotor.setPower(actualSpeed);
         rightMotor.setPower(actualSpeed);
         waitTime(moveMilis);
@@ -71,7 +71,7 @@ public class HardwareSirvoBot
 
     //Define go backward method
     public void goBackward(double motorSpeed, int moveMilis) {
-        double actualSpeed = motorSpeed * -1;
+        double actualSpeed = motorSpeed * -0.8;
         leftMotor.setPower(actualSpeed);
         rightMotor.setPower(actualSpeed);
         waitTime(moveMilis);
