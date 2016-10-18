@@ -19,6 +19,7 @@ public class HardwareSirvoBot
     //Define public members
     public DcMotor leftMotor = null;
     public DcMotor rightMotor = null;
+    public DcMotor armMotor = null;
     public ElapsedTime runtime = new ElapsedTime();
 
     //Define private members
@@ -102,18 +103,22 @@ public class HardwareSirvoBot
         //Hardware map motors
         leftMotor = hwMap.dcMotor.get("left motor");
         rightMotor = hwMap.dcMotor.get("right motor");
+        armMotor = hwMap.dcMotor.get("arm motor");
 
         //Set direction of motors
         leftMotor.setDirection(DcMotor.Direction.FORWARD);
         rightMotor.setDirection(DcMotor.Direction.REVERSE);
+        armMotor.setDirection(DcMotor.Direction.FORWARD);
 
         //Turn off motors
         leftMotor.setPower(0);
         rightMotor.setPower(0);
+        armMotor.setPower(0);
 
         //Disable encoders on motors (Turn back on when we get new motors -Reece)
         leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     /**
