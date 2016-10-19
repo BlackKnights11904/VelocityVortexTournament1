@@ -75,10 +75,9 @@ public class SirvoBotTeleOp extends LinearOpMode {
             //Set variable
             double robotSpeed = 1;
             int speedVar = 1;
-            int i = 1;
             telemetry.addData("Say", "Speed set to ", speedVar);
-            if (gamepad1.y == true) {
-                speedVar = ++i;
+            if (gamepad1.b == true) {
+                speedVar += 1;
                 if (speedVar <= 3) {
                     telemetry.addData("Say", "Speed set to ", speedVar);
                 } else {
@@ -98,6 +97,13 @@ public class SirvoBotTeleOp extends LinearOpMode {
             //Set motor speed based on gamepad sticks
             robot.leftMotor.setPower(-gamepad1.left_stick_y * robotSpeed + gamepad1.left_stick_x * 0.2);
             robot.rightMotor.setPower(-gamepad1.right_stick_y * robotSpeed + -gamepad1.right_stick_x * 0.2);
+
+            //Change position of arm motor when Y (to raise) A (to lower)
+            if (gamepad1.y == true) {
+                robot.armForward(1, 500);
+            } else {
+                robot.armBackward(1, 500);
+            }
 
             /**
              * All this telemetry code outputs of the right x and y axis and left x and y axis.
