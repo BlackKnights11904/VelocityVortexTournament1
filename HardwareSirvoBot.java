@@ -79,10 +79,10 @@ public class HardwareSirvoBot
     }
 
     //Define stop movement method
-    public void stopMovement(int stopTime) {
+    public void stopMovement(int stopForTime) {
         leftMotor.setPower(0);
         rightMotor.setPower(0);
-        waitTime(stopTime);
+        waitTime(stopForTime);
     }
 
     /**
