@@ -14,8 +14,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 
 //Main constructor, don't change unless you've renamed file without refactor
-public class HardwareSirvoBot
-{
+public class HardwareSirvoBot {
     //Define public members
     public DcMotor leftMotor = null;
     public DcMotor rightMotor = null;
