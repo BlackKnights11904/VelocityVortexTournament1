@@ -73,6 +73,9 @@ public class SirvoBotAutonomous extends LinearOpMode {
         robot.turnRight(135);
         robot.goForward(1, 2000);
         robot.stopMovement(0);
+        robot.armForward(1, 500);
+        robot.waitTime(100);
+        robot.armBackward(1, 500);
 
         //OpMode won't function without the code below this comment, so don't remove it
         idle();

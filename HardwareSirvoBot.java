@@ -35,8 +35,14 @@ public class HardwareSirvoBot
 
     //Define wait time method
     public void waitTime(int waitMilis) {
+
+        //Program to catch an error
         try {
+
+            //Make java's program execution sleep
             Thread.sleep(waitMilis);
+
+        //Catch error
         } catch (InterruptedException ex) {
             Thread.currentThread().interrupt();
         }
@@ -44,45 +50,134 @@ public class HardwareSirvoBot
 
     //Define left turn method
     public void turnLeft(int degreeOfTurn) {
+
+        //Do some math stuff so we can turn a certain amount of degrees
         int degrees = degreeOfTurn / 10 * 84;
+
+        //Set the power of left and right motors
         leftMotor.setPower(-0.1125);
         rightMotor.setPower(0.1125);
+
+        //Wait for time so it turns a certain amount of degrees
         waitTime(degrees);
-        leftMotor.setPower(0);
-        rightMotor.setPower(0);
+
+        //Stop motors after a certain amount of degrees turned
+        stopMovement(0);
+
+        //Wait time so program doesn't bug
+        waitTime(50);
     }
 
     //Define right turn method
     public void turnRight(int degreeOfTurn) {
+
+        //Do some math stuff so we can turn a certain amount of degrees
         int degrees = degreeOfTurn / 10 * 84;
+
+        //Set the power of left and right motors
         leftMotor.setPower(0.1125);
         rightMotor.setPower(-01125);
+
+        //Wait for time so it turns a certain amount of degrees
         waitTime(degrees);
-        leftMotor.setPower(0);
-        rightMotor.setPower(0);
+
+        //Stop movement
+        stopMovement(0);
+
+        //Wait time so program doesn't bug
+        waitTime(50);
     }
 
     //Define go straight method
     public void goForward(double motorSpeed, int moveMilis) {
+
+        //Limit maximum speed so we don't fall over
         double actualSpeed = motorSpeed * 0.8;
+
+        //Set speed of left and right motor
         leftMotor.setPower(actualSpeed);
         rightMotor.setPower(actualSpeed);
+
+        //Wait time specified
         waitTime(moveMilis);
+
+        //Stop movement
+        stopMovement(0);
+
+        //Wait time so program doesn't bug
+        waitTime(50);
     }
 
     //Define go backward method
     public void goBackward(double motorSpeed, int moveMilis) {
+
+        //Limit maximum speed so we don't fall over
         double actualSpeed = motorSpeed * -0.8;
+
+        //Set speed of left and right motor
         leftMotor.setPower(actualSpeed);
         rightMotor.setPower(actualSpeed);
+
+        //Wait time specified
         waitTime(moveMilis);
+
+        //Stop movement
+        stopMovement(0);
+
+        //Wait time so program doesn't bug
+        waitTime(50);
     }
 
     //Define stop movement method
     public void stopMovement(int stopForTime) {
+
+        //Set power of left and right motor
         leftMotor.setPower(0);
         rightMotor.setPower(0);
+
+        //Wait time if specified
         waitTime(stopForTime);
+
+        //Wait time so program doesn't bug
+        waitTime(50);
+    }
+
+    //Define arm forward method
+    public void armForward(double armPower, int armMoveMilis) {
+
+        //Set arm motor to low speed so it doesn't break
+        armPower *= 0.4;
+
+        // Set power of arm motor
+        armMotor.setPower(armPower);
+
+        //Wait time specified
+        waitTime(armMoveMilis);
+
+        //Stop arm motors
+        armMotor.setPower(0);
+
+        //Wait time so program doesn't bug
+        waitTime(50);
+    }
+
+    //Define arm backward method
+    public void armBackward(double armPower, int armMoveMilis) {
+
+        //Set power to -0.4 so it goes in reverse and goes at a lower speed so it doesn't break
+        armPower *= -0.4;
+
+        //Set power of arm motor
+        armMotor.setPower(armPower);
+
+        //Wait time specified
+        waitTime(armMoveMilis);
+
+        armMotor.setPower(0);
+
+        //Stop arm motors
+        //Wait time so program doesn't bug
+        waitTime(50);
     }
 
     /**
