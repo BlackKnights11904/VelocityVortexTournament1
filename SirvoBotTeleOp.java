@@ -72,36 +72,14 @@ public class SirvoBotTeleOp extends LinearOpMode {
         //Code run until driver presses stop
         while (opModeIsActive()) {
 
-            //Set speed variable
-            double robotSpeed = 1;
-            int speedVar = 1;
-            telemetry.addData("Say", "Speed set to ", speedVar);
-            if (gamepad1.b == true) {
-                speedVar += 1;
-                if (speedVar <= 3) {
-                    telemetry.addData("Say", "Speed set to ", speedVar);
-                } else {
-                    speedVar = 1;
-                }
-            }
-
-            //Set robot speeds based on speedVar
-            if (speedVar == 1) {
-                robotSpeed = 0.8;
-            } if (speedVar == 2) {
-                robotSpeed = 0.7;
-            } if (speedVar == 3) {
-                robotSpeed = 0.6;
-            }
-
             //Set motor speed based on gamepad sticks
-            robot.leftMotor.setPower(-gamepad1.left_stick_y * robotSpeed + gamepad1.left_stick_x * 0.2);
-            robot.rightMotor.setPower(-gamepad1.right_stick_y * robotSpeed + -gamepad1.right_stick_x * 0.2);
+            robot.leftMotor.setPower(-gamepad1.left_stick_y * 0.8 + gamepad1.left_stick_x * 0.2);
+            robot.rightMotor.setPower(-gamepad1.right_stick_y * 0.8 + -gamepad1.right_stick_x * 0.2);
 
             //Change position of arm motor when Y (to raise) A (to lower)
-            if (gamepad1.y == true) {
+            if (gamepad1.y) {
                 robot.armForward(1, 500);
-            } else {
+            } else if (!gamepad1.y) {
                 robot.armBackward(1, 500);
             }
 
@@ -114,8 +92,6 @@ public class SirvoBotTeleOp extends LinearOpMode {
             telemetry.addData("LS X AXIS", -gamepad1.left_stick_x);
             telemetry.addData("RS Y AXIS", -gamepad1.right_stick_y);
             telemetry.addData("RS X AXIS", -gamepad1.right_stick_x);
-            telemetry.addData("SPEED VARIABLE: ", speedVar);
-            telemetry.addData("ROBOT SPEED %: ", (robotSpeed + 0.2) * 10);
             telemetry.update();
 
             //OpMode won't function without the code below this comment, so don't remove it
