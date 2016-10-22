@@ -72,7 +72,7 @@ public class SirvoBotTeleOp extends LinearOpMode {
         //Code run until driver presses stop
         while (opModeIsActive()) {
 
-            //Set variable
+            //Set speed variable
             double robotSpeed = 1;
             int speedVar = 1;
             telemetry.addData("Say", "Speed set to ", speedVar);

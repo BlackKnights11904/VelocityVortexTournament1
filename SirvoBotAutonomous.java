@@ -70,7 +70,7 @@ public class SirvoBotAutonomous extends LinearOpMode {
 
         //Start of the actual autonomous program, all your code to make the robot move goes here
         robot.goForward(1, 1000);
-        robot.turnRight(135);
+        robot.turnRight(90);
         robot.goForward(1, 2000);
         robot.stopMovement(0);
         robot.armForward(1, 500);

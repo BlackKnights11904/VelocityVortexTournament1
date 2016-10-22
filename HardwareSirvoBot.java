@@ -146,7 +146,7 @@ public class HardwareSirvoBot {
     public void armForward(double armPower, int armMoveMilis) {
 
         //Set arm motor to low speed so it doesn't break
-        armPower *= 0.4;
+        armPower = armPower * 0.4;
 
         // Set power of arm motor
         armMotor.setPower(armPower);
@@ -165,7 +165,7 @@ public class HardwareSirvoBot {
     public void armBackward(double armPower, int armMoveMilis) {
 
         //Set power to -0.4 so it goes in reverse and goes at a lower speed so it doesn't break
-        armPower *= -0.4;
+        armPower = armPower * -0.4;
 
         //Set power of arm motor
         armMotor.setPower(armPower);
@@ -173,9 +173,9 @@ public class HardwareSirvoBot {
         //Wait time specified
         waitTime(armMoveMilis);
 
+        //Stop arm motors
         armMotor.setPower(0);
 
-        //Stop arm motors
         //Wait time so program doesn't bug
         waitTime(50);
     }
