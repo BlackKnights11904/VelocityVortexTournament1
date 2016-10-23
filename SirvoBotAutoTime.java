@@ -32,24 +32,23 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.util.Range;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcontroller.external.samples.HardwareK9bot;
-import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
 
 /**
- * This is a simple TeleOp program I put together to test the new hardware file, obviously some
+ * This is a simple Autonomous program I put together to test the new hardware file, obviously some
  * adjustments will happen and this file may be replaced or overwritten and that is fine.
- * Take this file as a guideline or just guide to learn how to make a simple TeleOp that uses the
- * hardware class. -Reece
+ * Take this file as a guideline or just guide to learn how to make a simple Autonomous that uses
+ * the hardware class. -Reece
  */
 
-@TeleOp(name="BlackKnights: TeleOp", group="11904")
+@Autonomous(name="Autonomous by Time", group="11904")
 //@Disabled
-public class SirvoBotTeleOp extends LinearOpMode {
+public class SirvoBotAutoTime extends LinearOpMode {
 
     //Define local members
     HardwareSirvoBot robot = new HardwareSirvoBot();
@@ -61,7 +60,7 @@ public class SirvoBotTeleOp extends LinearOpMode {
         //Uses code from HardwareSirvoBot to map all the hardware for us
         robot.init(hardwareMap);
 
-        //Send message through telemetry
+        //Send messages through telemetry
         telemetry.addData("Status", "Initialization");
         telemetry.addData("Say", "Program is running!");
         telemetry.update();
@@ -72,27 +71,14 @@ public class SirvoBotTeleOp extends LinearOpMode {
         //Code run until driver presses stop
         while (opModeIsActive()) {
 
-            //Set motor speed based on gamepad sticks
-            robot.leftMotor.setPower(-gamepad1.left_stick_y * 0.8 + gamepad1.left_stick_x * 0.2);
-            robot.rightMotor.setPower(-gamepad1.right_stick_y * 0.8 + -gamepad1.right_stick_x * 0.2);
-
-            //Change position of arm motor when Y (to raise) A (to lower)
-            if (gamepad1.y) {
-                robot.armForward(1, 500);
-            } else if (!gamepad1.y) {
-                robot.armBackward(1, 500);
-            }
-
-            /**
-             * All this telemetry code outputs of the right x and y axis and left x and y axis.
-             * The rest gives gives what speed variable you're in (essentially gear) and what percent
-             * of maximum speed you are going. -Reece
-             */
-            telemetry.addData("LS Y AXIS", -gamepad1.left_stick_y);
-            telemetry.addData("LS X AXIS", -gamepad1.left_stick_x);
-            telemetry.addData("RS Y AXIS", -gamepad1.right_stick_y);
-            telemetry.addData("RS X AXIS", -gamepad1.right_stick_x);
-            telemetry.update();
+            //Start of the actual autonomous program, all your code to make the mode move goes here
+            robot.goForward(1, 1000);
+            robot.turnRight(90);
+            robot.goForward(1, 2000);
+            robot.stopMovement(0);
+            robot.armForward(1, 500);
+            robot.waitTime(100);
+            robot.armBackward(1, 500);
 
             //OpMode won't function without the code below this comment, so don't remove it
             idle();
