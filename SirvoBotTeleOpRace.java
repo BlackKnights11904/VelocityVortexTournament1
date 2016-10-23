@@ -32,13 +32,8 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.util.Range;
-
-import org.firstinspires.ftc.robotcontroller.external.samples.HardwareK9bot;
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 /**
  * This is a simple TeleOp program I put together to test the new hardware file, obviously some
@@ -47,9 +42,9 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
  * hardware class. -Reece
  */
 
-@TeleOp(name="BlackKnights: TeleOp", group="11904")
+@TeleOp(name="TeleOp Race Controls", group="11904")
 //@Disabled
-public class SirvoBotTeleOp extends LinearOpMode {
+public class SirvoBotTeleOpRace extends LinearOpMode {
 
     //Define local members
     HardwareSirvoBot robot = new HardwareSirvoBot();
@@ -72,32 +67,35 @@ public class SirvoBotTeleOp extends LinearOpMode {
         //Code run until driver presses stop
         while (opModeIsActive()) {
 
-            //Set variable
-            double robotSpeed = 1;
-            int speedVar = 1;
-            int i = 1;
-            telemetry.addData("Say", "Speed set to ", speedVar);
-            if (gamepad1.y == true) {
-                speedVar = ++i;
-                if (speedVar <= 3) {
-                    telemetry.addData("Say", "Speed set to ", speedVar);
-                } else {
-                    speedVar = 1;
+            //Set motor speed based on gamepad sticks
+            robot.leftMotor.setPower((gamepad1.left_trigger * 0.75) - (gamepad1.right_trigger * 0.75) + gamepad1.left_stick_x);
+            robot.rightMotor.setPower((gamepad1.left_trigger * 0.75) - (gamepad1.right_trigger * 0.75) - gamepad1.left_stick_x);
+
+            //Make it turn once
+            boolean turnedOn = false;
+
+            //Change position of arm motor when Y (to raise) A (to lower)
+            if (gamepad1.right_bumper) {
+
+                turnedOn = false;
+
+                //Turn if hasn't turned yet
+                if (!turnedOn) {
+                    robot.armForward(1, 500);
+                } else if (turnedOn) {
+                    turnedOn = false;
+                }
+            } else if (gamepad1.left_bumper) {
+
+                turnedOn = true;
+
+                //Turn if has turned
+                if (turnedOn) {
+                    robot.armBackward(1, 500);
+                } else if (!turnedOn) {
+                    turnedOn = true;
                 }
             }
-
-            //Set robot speeds based on speedVar
-            if (speedVar == 1) {
-                robotSpeed = 0.8;
-            } if (speedVar == 2) {
-                robotSpeed = 0.7;
-            } if (speedVar == 3) {
-                robotSpeed = 0.6;
-            }
-
-            //Set motor speed based on gamepad sticks
-            robot.leftMotor.setPower(-gamepad1.left_stick_y * robotSpeed + gamepad1.left_stick_x * 0.2);
-            robot.rightMotor.setPower(-gamepad1.right_stick_y * robotSpeed + -gamepad1.right_stick_x * 0.2);
 
             /**
              * All this telemetry code outputs of the right x and y axis and left x and y axis.
@@ -108,8 +106,6 @@ public class SirvoBotTeleOp extends LinearOpMode {
             telemetry.addData("LS X AXIS", -gamepad1.left_stick_x);
             telemetry.addData("RS Y AXIS", -gamepad1.right_stick_y);
             telemetry.addData("RS X AXIS", -gamepad1.right_stick_x);
-            telemetry.addData("SPEED VARIABLE: ", speedVar);
-            telemetry.addData("ROBOT SPEED %: ", (robotSpeed + 0.2) * 10);
             telemetry.update();
 
             //OpMode won't function without the code below this comment, so don't remove it
