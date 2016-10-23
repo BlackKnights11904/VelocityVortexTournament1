@@ -401,7 +401,7 @@ public class HardwareSirvoBot {
         if (r >= colorSensor.red() / 85 || r <= colorSensor.red() / 85) {
             if (g >= colorSensor.green() / 85 || g <= colorSensor.green() / 85) {
                 if (b >= colorSensor.blue() / 85 || b <= colorSensor.blue() / 85) {
-                    driveInches = rangeSensor.getDistance(DistanceUnit.INCH) - 14;
+                    driveInches = rangeSensor.getDistance(DistanceUnit.INCH) - 18;
                     waitTime(50);
                     gyroDrive(speed, driveInches, 0);
                 } else {
