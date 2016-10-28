@@ -62,8 +62,8 @@ public class SirvoBotTeleOpTank extends LinearOpMode {
         robot.init(hardwareMap);
 
         //Send message through telemetry
-        telemetry.addData("Status", "Initialization");
-        telemetry.addData("Say", "Program is running!");
+        telemetry.addLine("> Initializing program...");
+        telemetry.addLine("> Program successfully started.");
         telemetry.update();
 
         //Waits for driver to press play
@@ -73,33 +73,23 @@ public class SirvoBotTeleOpTank extends LinearOpMode {
         while (opModeIsActive()) {
 
             //Set motor speed based on gamepad sticks
-            robot.leftMotor.setPower(-gamepad1.left_stick_y * 0.75);
-            robot.rightMotor.setPower(-gamepad1.right_stick_y * 0.75);
+            robot.leftMotor.setPower(-gamepad1.left_stick_y * 0.5);
+            robot.rightMotor.setPower(-gamepad1.right_stick_y * 0.5);
 
-            //Make it turn once
+            //Make arm turn once
             boolean turnedOn = false;
 
             //Change position of arm motor when Y (to raise) A (to lower)
-            if (gamepad1.right_bumper) {
+            if (gamepad1.left_bumper && !turnedOn) {
 
-                turnedOn = false;
-
-                //Turn if hasn't turned yet
-                if (!turnedOn) {
-                    robot.armForward(1, 500);
-                } else if (turnedOn) {
-                    turnedOn = false;
-                }
-            } else if (gamepad1.left_bumper) {
-
+                //Set arm variable to true so it won't run again
                 turnedOn = true;
+                robot.moveArm(1, 250);
+            } if (gamepad1.right_bumper && turnedOn) {
 
-                //Turn if has turned
-                if (turnedOn) {
-                    robot.armBackward(1, 500);
-                } else if (!turnedOn) {
-                    turnedOn = true;
-                }
+                //Set arm variable to false so it won't run again
+                turnedOn = false;
+                robot.moveArm(-1, 250);
             }
 
             /**
@@ -107,10 +97,9 @@ public class SirvoBotTeleOpTank extends LinearOpMode {
              * The rest gives gives what speed variable you're in (essentially gear) and what percent
              * of maximum speed you are going. -Reece
              */
-            telemetry.addData("LS Y AXIS", -gamepad1.left_stick_y);
-            telemetry.addData("LS X AXIS", -gamepad1.left_stick_x);
-            telemetry.addData("RS Y AXIS", -gamepad1.right_stick_y);
-            telemetry.addData("RS X AXIS", -gamepad1.right_stick_x);
+            telemetry.addData("> Left Y ", -gamepad1.left_stick_y);
+            telemetry.addData("> Right Y ", -gamepad1.right_stick_y);
+            telemetry.addData("> Speed ", ((-gamepad1.left_stick_y * -gamepad1.right_stick_y) * 0.5) * 100 + "%");
             telemetry.update();
 
             //OpMode won't function without the code below this comment, so don't remove it

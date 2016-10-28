@@ -44,10 +44,14 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 @Autonomous(name="Autonomous by Gyro", group="11904")
 //@Disabled
-public class SirvoBotAutoGyro extends LinearOpMode {
+public class SirvoBotAutoEncoder extends LinearOpMode {
 
     //Define local members
-    HardwareSirvoBot robot = new HardwareSirvoBot();
+    private HardwareSirvoBot robot = new HardwareSirvoBot();
+
+    //Define variables for max turn and drive speed
+    private static final double DRIVE_SPEED = 0.6;
+    private static final double TURN_SPEED = 0.35;
 
     //Code run in initialization
     @Override
@@ -64,18 +68,12 @@ public class SirvoBotAutoGyro extends LinearOpMode {
         //Waits for driver to press play
         waitForStart();
 
-        //Code run until driver presses stop
-        while (opModeIsActive()) {
-
-            //Start of movement using gyro
-            robot.gyroDrive(1, 24, 0.0);
-            robot.gyroTurn(1, 45);
-            robot.gyroDrive(1, 12, 45);
-            robot.gyroTurn(1, 90);
-            robot.gyroDrive(1, -30, 0.0);
-
-            //OpMode won't function without the code below this comment, so don't remove it
-            idle();
-        }
+        //Use encoders to make robot move a certain amount of inches
+        robot.drive(DRIVE_SPEED, 24, 24, 0);
+        robot.drive(TURN_SPEED, 12, -12, 0);
+        robot.drive(DRIVE_SPEED, 12, 12, 0);
+        robot.moveArm(1, 250);
+        robot.waitTime(250);
+        robot.moveArm(-1, 250);
     }
 }

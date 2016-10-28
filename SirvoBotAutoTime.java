@@ -72,13 +72,15 @@ public class SirvoBotAutoTime extends LinearOpMode {
         while (opModeIsActive()) {
 
             //Start of the actual autonomous program, all your code to make the mode move goes here
-            robot.goForward(1, 1000);
-            robot.turnRight(90);
-            robot.goForward(1, 2000);
-            robot.stopMovement(0);
-            robot.armForward(1, 500);
-            robot.waitTime(100);
-            robot.armBackward(1, 500);
+            robot.leftMotor.setPower(0.5);
+            robot.rightMotor.setPower(0.5);
+            robot.waitTime(2000);
+            robot.rightMotor.setPower(0);
+            robot.waitTime(250);
+            robot.rightMotor.setPower(0.5);
+            robot.waitTime(1000);
+            robot.leftMotor.setPower(0);
+            robot.rightMotor.setPower(0);
 
             //OpMode won't function without the code below this comment, so don't remove it
             idle();
