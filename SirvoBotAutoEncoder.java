@@ -34,6 +34,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 /**
  * This is a simple Autonomous program I put together to test the new hardware file, obviously some
@@ -42,7 +43,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
  * the hardware class. -Reece
  */
 
-@Autonomous(name="Autonomous by Gyro", group="11904")
+@Autonomous(name="Autonomous by Encoder", group="11904")
 //@Disabled
 public class SirvoBotAutoEncoder extends LinearOpMode {
 
@@ -53,6 +54,51 @@ public class SirvoBotAutoEncoder extends LinearOpMode {
     private static final double DRIVE_SPEED = 0.6;
     private static final double TURN_SPEED = 0.35;
 
+    //Technical details of wheel for accurate movement with encoder
+    public static final double COUNTS_PER_MOTOR_REV = 1440;
+    public static final double DRIVE_GEAR_REDUCTION = 2;
+    public static final double WHEEL_DIAMETER_INCHES = 4;
+    public static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
+
+    //Define move robot method, use positive power to go forward, negative to go backward
+    public void drive(double power, double leftInches, double rightInches, double timeoutSeconds) {
+
+        //Make new integer to set left and right motor targets
+        int leftTarget;
+        int rightTarget;
+
+        if (opModeIsActive()) {
+            //Determine left and right target to move to
+            leftTarget = robot.leftMotor.getCurrentPosition() + (int) (leftInches * COUNTS_PER_INCH);
+            rightTarget = robot.rightMotor.getCurrentPosition() + (int) (rightInches * COUNTS_PER_INCH);
+
+            //Set target and move to position
+            robot.leftMotor.setTargetPosition(leftTarget);
+            robot.rightMotor.setTargetPosition(rightTarget);
+            robot.leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            //Reset runtime and start motion
+            robot.leftMotor.setPower(Math.abs(power * 0.75));
+            robot.rightMotor.setPower(Math.abs(power * 0.75));
+
+            //Test if motors are busy, runtime is less than timeout and motors are busy and then run code
+            while (opModeIsActive() && robot.runtime.seconds() <= timeoutSeconds && robot.leftMotor.isBusy() && robot.rightMotor.isBusy()) {
+
+                //Display path to driver
+                telemetry.addData("> Moving to pos ", leftTarget + rightTarget);
+            }
+
+            //Stop motors after moved to position
+            robot.leftMotor.setPower(0);
+            robot.rightMotor.setPower(0);
+
+            //Set motors back to using run using encoder
+            robot.leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }
+    }
+
     //Code run in initialization
     @Override
     public void runOpMode() throws InterruptedException {
@@ -60,18 +106,18 @@ public class SirvoBotAutoEncoder extends LinearOpMode {
         //Uses code from HardwareSirvoBot to map all the hardware for us
         robot.init(hardwareMap);
 
-        //Send messages through telemetry
-        telemetry.addData("Status", "Initialization");
-        telemetry.addData("Say", "Program is running!");
+        //Send message through telemetry
+        telemetry.addLine("> Initializing program...");
+        telemetry.addLine("> Program successfully started.");
         telemetry.update();
 
         //Waits for driver to press play
         waitForStart();
 
         //Use encoders to make robot move a certain amount of inches
-        robot.drive(DRIVE_SPEED, 24, 24, 0);
-        robot.drive(TURN_SPEED, 12, -12, 0);
-        robot.drive(DRIVE_SPEED, 12, 12, 0);
+        drive(DRIVE_SPEED, 6, 6, 0);
+        drive(TURN_SPEED, 3, -3, 0);
+        drive(DRIVE_SPEED, -2, -2, 0);
         robot.moveArm(1, 250);
         robot.waitTime(250);
         robot.moveArm(-1, 250);

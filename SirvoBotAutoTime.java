@@ -60,9 +60,9 @@ public class SirvoBotAutoTime extends LinearOpMode {
         //Uses code from HardwareSirvoBot to map all the hardware for us
         robot.init(hardwareMap);
 
-        //Send messages through telemetry
-        telemetry.addData("Status", "Initialization");
-        telemetry.addData("Say", "Program is running!");
+        //Send message through telemetry
+        telemetry.addLine("> Initializing program...");
+        telemetry.addLine("> Program successfully started.");
         telemetry.update();
 
         //Waits for driver to press play

@@ -72,19 +72,21 @@ public class SirvoBotTeleOpRace extends LinearOpMode {
             robot.rightMotor.setPower((gamepad1.left_trigger * 0.5) - (gamepad1.right_trigger * 0.5) - (gamepad1.left_stick_x * 0.15));
 
             //Make arm turn once
-            boolean turnedOn = false;
+            int turnedOn = 2;
 
             //Change position of arm motor when Y (to raise) A (to lower)
-            if (gamepad1.left_bumper && !turnedOn) {
+            if (gamepad1.left_bumper && turnedOn == 1) {
 
                 //Set arm variable to true so it won't run again
-                turnedOn = true;
+                turnedOn += 1;
                 robot.moveArm(1, 250);
-            } if (gamepad1.right_bumper && turnedOn) {
+            } if (gamepad1.right_bumper && turnedOn == 2) {
 
                 //Set arm variable to false so it won't run again
-                turnedOn = false;
+                turnedOn -= 1;
                 robot.moveArm(-1, 250);
+            } if (turnedOn > 2 || turnedOn < 1) {
+                turnedOn = 1;
             }
 
             /**

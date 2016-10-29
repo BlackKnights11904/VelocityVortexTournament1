@@ -19,12 +19,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 //Main constructor, don't change this
 public class HardwareSirvoBot {
 
-    //Technical details of wheel for accurate movement with encoder
-    public static final double COUNTS_PER_MOTOR_REV = 1440;
-    public static final double DRIVE_GEAR_REDUCTION = 2;
-    public static final double WHEEL_DIAMETER_INCHES = 4;
-    public static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
-
     //Define motors and other important variables
     public DcMotor leftMotor = null;
     public DcMotor rightMotor = null;
@@ -62,47 +56,6 @@ public class HardwareSirvoBot {
         }
     }
 
-    //Define move robot method, use positive power to go forward, negative to go backward
-    public void drive(double power, double leftInches, double rightInches, double timeoutSeconds) {
-
-        //Make new integer to set left and right motor targets
-        int leftTarget;
-        int rightTarget;
-
-        //Make sure op mode is active before running code
-        if (mode.opModeIsActive()) {
-
-            //Determine left and right target to move to
-            leftTarget = leftMotor.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
-            rightTarget = rightMotor.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
-
-            //Set target and move to position
-            leftMotor.setTargetPosition(leftTarget);
-            rightMotor.setTargetPosition(rightTarget);
-            leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-            //Reset runtime and start motion
-            leftMotor.setPower(Math.abs(power * 0.75));
-            rightMotor.setPower(Math.abs(power * 0.75));
-
-            //Test if motors are busy, runtime is less than timeout and motors are busy and then run code
-            while (mode.opModeIsActive() && runtime.seconds() <= timeoutSeconds && leftMotor.isBusy() && rightMotor.isBusy()) {
-
-                //Display path to driver
-                mode.telemetry.addData("> Moving to pos ", leftTarget + rightTarget);
-            }
-
-            //Stop motors after moved to position
-            leftMotor.setPower(0);
-            rightMotor.setPower(0);
-
-            //Set motors back to using run using encoder
-            leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        }
-    }
-
     //Define move arm method, use positive to go forward, negative to go backward
     public void moveArm(double power, int miliseconds) {
 
@@ -117,9 +70,6 @@ public class HardwareSirvoBot {
 
         //Stop arm motors
         armMotor.setPower(0);
-
-        //Idle if op mode is active
-        mode.idle();
     }
     //End of robot methods. Put all methods above this comment
 
