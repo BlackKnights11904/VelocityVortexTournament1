@@ -32,8 +32,10 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 /**
  * This is a simple TeleOp program I put together to test the new hardware file, obviously some
@@ -42,19 +44,36 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
  * hardware class. -Reece
  */
 
-@TeleOp(name="TeleOp Race Controls with Spinner", group="11904")
-//@Disabled
-public class SirvoBotTeleOpRace extends LinearOpMode {
+@TeleOp(name="Spinner Test", group="11904")
+@Disabled
+public class SpinnerTest extends LinearOpMode {
 
     //Define local members
     HardwareSirvoBot robot = new HardwareSirvoBot();
+
+    public DcMotor spinnerMotor = null;
+
+    public void waitTime(int miliseconds) {
+
+        //Program to catch an error
+        try {
+
+            //Make java's program execution sleep
+            Thread.sleep(miliseconds);
+
+            //Catch error
+        } catch (InterruptedException ex) {
+            Thread.currentThread().interrupt();
+        }
+    }
 
     //Code run in initialization
     @Override
     public void runOpMode() throws InterruptedException {
 
         //Uses code from HardwareSirvoBot to map all the hardware for us
-        robot.init(hardwareMap);
+        //robot.init(hardwareMap);
+        spinnerMotor = hardwareMap.dcMotor.get("spinner motor");
 
         //Send message through telemetry
         telemetry.addLine("> Initializing program...");
@@ -67,45 +86,30 @@ public class SirvoBotTeleOpRace extends LinearOpMode {
         //Code run until driver presses stop
         while (opModeIsActive()) {
 
-            //Set motor speed based on gamepad triggers and sticks for race like controls
-            robot.leftMotor.setPower((gamepad1.right_trigger * 0.6) - (gamepad1.left_trigger * 0.6) + (gamepad1.left_stick_x * 0.3));
-            robot.rightMotor.setPower((gamepad1.right_trigger * 0.6) - (gamepad1.left_trigger * 0.6) - (gamepad1.left_stick_x * 0.3));
+            boolean spinnerMoving = false;
 
-            //Change position of arm motor when Right Bumper (to raise) Left Bumper (to lower) are pressed
-            /*if (gamepad1.right_bumper && !gamepad1.left_bumper) {
+            if (gamepad1.dpad_up && !gamepad1.dpad_down && !spinnerMoving) {
 
                 //Set arm power
-                robot.armMotor.setPower(0.6);
-            } if (gamepad1.left_bumper && !gamepad1.right_bumper) {
+                spinnerMotor.setPower(1);
+                spinnerMoving = true;
+                waitTime(1000);
+                spinnerMotor.setPower(0);
+                spinnerMoving = false;
+
+            } if (gamepad1.dpad_down && !gamepad1.dpad_up && !spinnerMoving) {
 
                 //Set arm power
-                robot.armMotor.setPower(-0.45);
-            } if (!gamepad1.right_bumper && !gamepad1.left_bumper) {
+                spinnerMotor.setPower(-1);
+                spinnerMoving = true;
+                waitTime(1000);
+                spinnerMotor.setPower(0);
+                spinnerMoving = false;
+
+            } if (!gamepad1.dpad_up && !gamepad1.dpad_down && !spinnerMoving) {
 
                 //Turn off arms
-                robot.armMotor.setPower(0);
-            } */
-
-            //Turn on and off spinner with the right and left bumpers
-            if (gamepad1.right_bumper && !gamepad1.left_bumper && !gamepad1.dpad_up) {
-
-                //Shoot out the ball really fast
-                robot.spinnerMotor.setPower(1);
-
-            } if (gamepad1.left_bumper && !gamepad1.right_bumper && !gamepad1.dpad_up) {
-
-                //Take ball into chamber
-                robot.spinnerMotor.setPower(-0.5);
-
-            } if (gamepad1.dpad_up && !gamepad1.right_bumper && !gamepad1.left_bumper) {
-
-                //Shoot ball out slowly so we can give ball to shooter bot
-                robot.spinnerMotor.setPower(0.25);
-
-            } if (!gamepad1.right_bumper && !gamepad1.left_bumper && !gamepad1.dpad_up) {
-
-                //Turn off motors
-                robot.spinnerMotor.setPower(0);
+                spinnerMotor.setPower(0);
 
             }
 

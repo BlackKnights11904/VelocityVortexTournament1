@@ -42,9 +42,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
  * hardware class. -Reece
  */
 
-@TeleOp(name="TeleOp Race Controls with Spinner", group="11904")
+@TeleOp(name="Arm test", group="11904")
 //@Disabled
-public class SirvoBotTeleOpRace extends LinearOpMode {
+public class SirvoBotArmTest extends LinearOpMode {
 
     //Define local members
     HardwareSirvoBot robot = new HardwareSirvoBot();
@@ -67,57 +67,21 @@ public class SirvoBotTeleOpRace extends LinearOpMode {
         //Code run until driver presses stop
         while (opModeIsActive()) {
 
-            //Set motor speed based on gamepad triggers and sticks for race like controls
-            robot.leftMotor.setPower((gamepad1.right_trigger * 0.6) - (gamepad1.left_trigger * 0.6) + (gamepad1.left_stick_x * 0.3));
-            robot.rightMotor.setPower((gamepad1.right_trigger * 0.6) - (gamepad1.left_trigger * 0.6) - (gamepad1.left_stick_x * 0.3));
-
-            //Change position of arm motor when Right Bumper (to raise) Left Bumper (to lower) are pressed
-            /*if (gamepad1.right_bumper && !gamepad1.left_bumper) {
+            //Test arm while trigger is down
+            //Change position of arm motor when Y (to raise) A (to lower)
+            if (gamepad1.y && !gamepad1.a) {
 
                 //Set arm power
-                robot.armMotor.setPower(0.6);
-            } if (gamepad1.left_bumper && !gamepad1.right_bumper) {
+                robot.armMotor.setPower(gamepad1.left_trigger);
+            } if (gamepad1.a && !gamepad1.y) {
 
                 //Set arm power
-                robot.armMotor.setPower(-0.45);
-            } if (!gamepad1.right_bumper && !gamepad1.left_bumper) {
+                robot.armMotor.setPower(-gamepad1.left_trigger);
+            } if (!gamepad1.a && !gamepad1.y) {
 
                 //Turn off arms
                 robot.armMotor.setPower(0);
-            } */
-
-            //Turn on and off spinner with the right and left bumpers
-            if (gamepad1.right_bumper && !gamepad1.left_bumper && !gamepad1.dpad_up) {
-
-                //Shoot out the ball really fast
-                robot.spinnerMotor.setPower(1);
-
-            } if (gamepad1.left_bumper && !gamepad1.right_bumper && !gamepad1.dpad_up) {
-
-                //Take ball into chamber
-                robot.spinnerMotor.setPower(-0.5);
-
-            } if (gamepad1.dpad_up && !gamepad1.right_bumper && !gamepad1.left_bumper) {
-
-                //Shoot ball out slowly so we can give ball to shooter bot
-                robot.spinnerMotor.setPower(0.25);
-
-            } if (!gamepad1.right_bumper && !gamepad1.left_bumper && !gamepad1.dpad_up) {
-
-                //Turn off motors
-                robot.spinnerMotor.setPower(0);
-
             }
-
-            /**
-             * All this telemetry code outputs of the right x and y axis and left x and y axis.
-             * The rest gives gives what speed variable you're in (essentially gear) and what percent
-             * of maximum speed you are going. -Reece
-             */
-            telemetry.addData("> FWD Speed", gamepad1.right_trigger);
-            telemetry.addData("> BWD Speed", gamepad1.left_trigger);
-            telemetry.addData("> Speed", gamepad1.right_trigger - gamepad1.left_trigger);
-            telemetry.update();
 
             //OpMode won't function without the code below this comment, so don't remove it
             idle();

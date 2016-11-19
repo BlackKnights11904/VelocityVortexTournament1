@@ -47,7 +47,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
  * hardware class. -Reece
  */
 
-@TeleOp(name="TeleOp Tank Controls", group="11904")
+@TeleOp(name="TeleOp Tank Controls with Spinner", group="11904")
 //@Disabled
 public class SirvoBotTeleOpTank extends LinearOpMode {
 
@@ -73,23 +73,45 @@ public class SirvoBotTeleOpTank extends LinearOpMode {
         while (opModeIsActive()) {
 
             //Set motor speed based on gamepad sticks
-            robot.leftMotor.setPower(-gamepad1.left_stick_y * 0.5);
-            robot.rightMotor.setPower(-gamepad1.right_stick_y * 0.5);
+            robot.leftMotor.setPower(-gamepad1.left_stick_y * 0.6);
+            robot.rightMotor.setPower(-gamepad1.right_stick_y * 0.6);
 
-            //Make arm turn once
-            boolean turnedOn = false;
+            //Change position of arm motor when Right Bumper (to raise) Left Bumper (to lower) are pressed
+            /*if (gamepad1.right_bumper && !gamepad1.left_bumper) {
 
-            //Change position of arm motor when Y (to raise) A (to lower)
-            if (gamepad1.left_bumper && !turnedOn) {
+                //Set arm power
+                robot.armMotor.setPower(0.6);
+            } if (gamepad1.left_bumper && !gamepad1.right_bumper) {
 
-                //Set arm variable to true so it won't run again
-                turnedOn = true;
-                robot.moveArm(1, 250);
-            } if (gamepad1.right_bumper && turnedOn) {
+                //Set arm power
+                robot.armMotor.setPower(-0.45);
+            } if (!gamepad1.right_bumper && !gamepad1.left_bumper) {
 
-                //Set arm variable to false so it won't run again
-                turnedOn = false;
-                robot.moveArm(-1, 250);
+                //Turn off arms
+                robot.armMotor.setPower(0);
+            } */
+
+            //Turn on and off spinner with the right and left bumpers
+            if (gamepad1.right_bumper && !gamepad1.left_bumper && !gamepad1.dpad_up) {
+
+                //Shoot out the ball really fast
+                robot.spinnerMotor.setPower(1);
+
+            } if (gamepad1.left_bumper && !gamepad1.right_bumper && !gamepad1.dpad_up) {
+
+                //Take ball into chamber
+                robot.spinnerMotor.setPower(-0.5);
+
+            } if (gamepad1.dpad_up && !gamepad1.right_bumper && !gamepad1.left_bumper) {
+
+                //Shoot ball out slowly so we can give ball to shooter bot
+                robot.spinnerMotor.setPower(0.25);
+
+            } if (!gamepad1.right_bumper && !gamepad1.left_bumper && !gamepad1.dpad_up) {
+
+                //Turn off motors
+                robot.spinnerMotor.setPower(0);
+
             }
 
             /**
