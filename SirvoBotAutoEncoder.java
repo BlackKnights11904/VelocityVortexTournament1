@@ -1,139 +1,120 @@
-/*
-Copyright (c) 2016 Robert Atkinson
-
-All rights reserved.
-
-Redistribution and use in source and binary forms, with or without modification,
-are permitted (subject to the limitations in the disclaimer below) provided that
-the following conditions are met:
-
-Redistributions of source code must retain the above copyright notice, this list
-of conditions and the following disclaimer.
-
-Redistributions in binary form must reproduce the above copyright notice, this
-list of conditions and the following disclaimer in the documentation and/or
-other materials provided with the distribution.
-
-Neither the name of Robert Atkinson nor the names of his contributors may be used to
-endorse or promote products derived from this software without specific prior
-written permission.
-
-NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS
-LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
-THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESSFOR A PARTICULAR PURPOSE
-ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
-FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
-TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
-THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
+
 /**
- * This is a simple Autonomous program I put together to test the new hardware file, obviously some
- * adjustments will happen and this file may be replaced or overwritten and that is fine.
- * Take this file as a guideline or just guide to learn how to make a simple Autonomous that uses
- * the hardware class. -Reece
+ * Basic autonomous encoder program. Duplicate this program to make actual ones.
  */
 
-@Autonomous(name="Autonomous by Encoder", group="11904")
+@Autonomous(name="Autonomous Encoder", group="11904")
 //@Disabled
 public class SirvoBotAutoEncoder extends LinearOpMode {
 
-    //Define local members
-    private HardwareSirvoBot robot = new HardwareSirvoBot();
+    // Hook into hardware file
+    HardwareSirvoBot robot = new HardwareSirvoBot();
 
-    //Make runtime
+    // Use ElapsedTime for encoders
     private ElapsedTime runtime = new ElapsedTime();
 
-    //Define variables for max turn and drive speed
-    private static final double DRIVE_SPEED = 0.6;
-    private static final double TURN_SPEED = 0.35;
+    // Calibrate encoder
+    static final double COUNTS_PER_MOTOR_REV = 1120;
+    static final double DRIVE_GEAR_REDUCTION = 1;
+    static final double WHEEL_DIAMETER_INCHES = 4;
+    static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * Math.PI);
 
-    //Technical details of wheel for accurate movement with encoder
-    public static final double COUNTS_PER_MOTOR_REV = 1440; // Originally 560
-    public static final double DRIVE_GEAR_REDUCTION = 2; // Originally 20
-    public static final double WHEEL_DIAMETER_INCHES = 4;
-    public static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
+    // Set speed variable for driving and turning
+    static final double DRIVE_SPEED = 1;
+    static final double TURN_SPEED = 0.8;
 
-    //Define move robot method, use positive power to go forward, negative to go backward
-    void drive(double power, double leftInches, double rightInches, double seconds) {
+    @Override
+    public void runOpMode() {
 
-        //Make new integer to set left and right motor targets
+        // Call from hardware file
+        robot.init(hardwareMap);
+
+        // Send telemetry to signify resetting encoders
+        telemetry.addData("Status", "Resetting Encoders");
+        telemetry.update();
+
+        // Reset encoders
+        robot.leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        idle();
+
+        // Set motors to run using encoders
+        robot.leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        // Send telemetry to show current position of motors
+        telemetry.addData("Path0",  "Starting at %7d :%7d", robot.leftMotor.getCurrentPosition(), robot.rightMotor.getCurrentPosition());
+        telemetry.update();
+
+        // Wait for the game to start (driver presses PLAY)
+        waitForStart();
+
+        // Use encoder drive method to drive a certain amount. Steps for program go here
+        encoderDrive(DRIVE_SPEED, 24, 24, 0);
+        encoderDrive(DRIVE_SPEED, -12, -12, 0);
+        encoderDrive(TURN_SPEED, 18, -18, 0);
+
+        // Add telemetry to signify the robot has reached it's destination
+        telemetry.addLine("> Path complete");
+        telemetry.update();
+    }
+
+    // encoderDrive method. Drives using the motor's encoders
+    public void encoderDrive(double speed, double leftInches, double rightInches, double waitSec) {
+
+        // Create integers holding encoder count to reach destination
         int leftTarget;
         int rightTarget;
 
+        // Ensure that the OpMode is still active
         if (opModeIsActive()) {
 
-            //Determine left and right target to move to
-            leftTarget = robot.leftMotor.getCurrentPosition() + (int) (leftInches * COUNTS_PER_INCH);
-            rightTarget = robot.rightMotor.getCurrentPosition() + (int) (rightInches * COUNTS_PER_INCH);
+            // Determine new target position
+            leftTarget = robot.leftMotor.getCurrentPosition() + (int)((leftInches - 2.5) * COUNTS_PER_INCH);
+            rightTarget = robot.rightMotor.getCurrentPosition() + (int)((rightInches - 2.5) * COUNTS_PER_INCH);
 
-            //Set target and move to position
+            // Set motor's target position
             robot.leftMotor.setTargetPosition(leftTarget);
             robot.rightMotor.setTargetPosition(rightTarget);
+
+            // Set motors to the mode: Run to position
             robot.leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             robot.rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-            //Reset runtime and start motion
-            robot.leftMotor.setPower(Math.abs(power));
-            robot.rightMotor.setPower(Math.abs(power));
+            // Reset the timeout and set the speed of the motors
+            runtime.reset();
+            robot.leftMotor.setPower(Math.abs(speed));
+            robot.rightMotor.setPower(Math.abs(speed));
 
-            //Test if motors are busy, runtime is less than timeout and motors are busy and then run code
-            while (opModeIsActive() && (runtime.seconds() < seconds) && (robot.leftMotor.isBusy() && robot.rightMotor.isBusy())) {
+            // Keep looping until timeout is over and motors are done moving
+            while (opModeIsActive() && (runtime.seconds() < waitSec) && (robot.leftMotor.isBusy() && robot.rightMotor.isBusy())) {
 
-                //Tell path to driver
-                telemetry.addData("Path1", "Running to: ", leftTarget, rightTarget);
-                telemetry.addData("Path2", "Running at: ", robot.leftMotor.getCurrentPosition(), robot.rightMotor.getCurrentPosition());
+                // Display position and target to driver
+                telemetry.addData(">",  "Going to %7d :%7d", leftTarget, rightTarget);
+                telemetry.addData(">",  "Current position %7d :%7d", robot.leftMotor.getCurrentPosition(), robot.rightMotor.getCurrentPosition());
                 telemetry.update();
+
+                // Allow time for process to run
+                idle();
             }
 
-            //Stop motors after moved to position
-            robot.leftMotor.setPower(0);
-            robot.rightMotor.setPower(0);
+            // Stop motors
+            robot.stopDriveMotors();
 
-            //Set motors back to using run using encoder
+            // Turn off motor's mode: Run to position
             robot.leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             robot.rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+            robot.waitTime(250);
         }
-    }
-
-    void turn(double angle) {
-
-        // Calculate angle to turn
-        double absoluteAngle = angle * 0.05;
-
-        drive(TURN_SPEED, angle, -angle, 0);
-
-    }
-
-    //Code run in initialization
-    @Override
-    public void runOpMode() throws InterruptedException {
-
-        //Uses code from HardwareSirvoBot to map all the hardware for us
-        robot.init(hardwareMap);
-
-        //Send message through telemetry
-        telemetry.addLine("> Initializing program...");
-        telemetry.addLine("> Program successfully started.");
-        telemetry.update();
-
-        //Waits for driver to press play
-        waitForStart();
-
-        //Use encoders to make robot move a certain amount of inches
-        drive(DRIVE_SPEED, 1, 1, 10);
-        drive(DRIVE_SPEED, -1, -5, 10);
-        robot.leftMotor.setPower(0);
-        robot.rightMotor.setPower(0);
     }
 }
