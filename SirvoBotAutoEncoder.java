@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
+// import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
 
 /**
  * Basic autonomous encoder program. Duplicate this program to make actual ones.
@@ -59,9 +59,7 @@ public class SirvoBotAutoEncoder extends LinearOpMode {
         waitForStart();
 
         // Use encoder drive method to drive a certain amount. Steps for program go here
-        encoderDrive(DRIVE_SPEED, 24, 24, 0);
-        encoderDrive(DRIVE_SPEED, -12, -12, 0);
-        encoderDrive(TURN_SPEED, 18, -18, 0);
+        encoderDrive(DRIVE_SPEED, 12, 12);
 
         // Add telemetry to signify the robot has reached it's destination
         telemetry.addLine("> Path complete");
@@ -69,7 +67,7 @@ public class SirvoBotAutoEncoder extends LinearOpMode {
     }
 
     // encoderDrive method. Drives using the motor's encoders
-    public void encoderDrive(double speed, double leftInches, double rightInches, double waitSec) {
+    public void encoderDrive(double speed, double leftInches, double rightInches) {
 
         // Create integers holding encoder count to reach destination
         int leftTarget;
@@ -96,7 +94,8 @@ public class SirvoBotAutoEncoder extends LinearOpMode {
             robot.rightMotor.setPower(Math.abs(speed));
 
             // Keep looping until timeout is over and motors are done moving
-            while (opModeIsActive() && (runtime.seconds() < waitSec) && (robot.leftMotor.isBusy() && robot.rightMotor.isBusy())) {
+//            while (opModeIsActive() && (runtime.seconds() < waitSec) && (robot.leftMotor.isBusy() && robot.rightMotor.isBusy())) {
+                while (opModeIsActive()  && (robot.leftMotor.isBusy() && robot.rightMotor.isBusy())) {
 
                 // Display position and target to driver
                 telemetry.addData(">",  "Going to %7d :%7d", leftTarget, rightTarget);
@@ -108,13 +107,14 @@ public class SirvoBotAutoEncoder extends LinearOpMode {
             }
 
             // Stop motors
-            robot.stopDriveMotors();
+            robot.leftMotor.setPower(0);
+            robot.rightMotor.setPower(0);
 
             // Turn off motor's mode: Run to position
             robot.leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             robot.rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-            robot.waitTime(250);
+            //robot.waitTime(250);
         }
     }
 }

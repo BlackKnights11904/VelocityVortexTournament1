@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -22,7 +23,6 @@ public class HardwareSirvoBot {
     // Define motors and other important variables
     public DcMotor leftMotor = null;
     public DcMotor rightMotor = null;
-    public DcMotor armMotor = null;
     public DcMotor sweeperMotor = null;
     public ElapsedTime runtime = new ElapsedTime();
 
@@ -89,20 +89,18 @@ public class HardwareSirvoBot {
         sweeperMotor = hwMap.dcMotor.get("sweeper motor");
 
         // Set direction of motors
-        leftMotor.setDirection(DcMotor.Direction.REVERSE);
-        rightMotor.setDirection(DcMotor.Direction.FORWARD);
+        leftMotor.setDirection(DcMotor.Direction.FORWARD);
+        rightMotor.setDirection(DcMotor.Direction.REVERSE);
         sweeperMotor.setDirection(DcMotor.Direction.FORWARD);
 
         // Turn off motors
         leftMotor.setPower(0);
         rightMotor.setPower(0);
-        armMotor.setPower(0);
         sweeperMotor.setPower(0);
 
-        // Enable encoders on wheel motors and disable on arm motor
-        leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        // Enable encoders on wheel motors and disable on sweeper motor
+        leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         sweeperMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
