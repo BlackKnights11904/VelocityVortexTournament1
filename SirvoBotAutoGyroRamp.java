@@ -35,9 +35,6 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.util.ElapsedTime;
-
-import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
 
 /**
  * This is a simple Autonomous program I put together to test the new hardware file, obviously some
@@ -46,12 +43,15 @@ import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
  * the hardware class. -Reece
  */
 
-@Autonomous(name="BlackKnights: Autonomous", group="11904")
+@Autonomous(name="Autonomous by Gyro", group="11904")
 //@Disabled
-public class SirvoBotAutonomous extends LinearOpMode {
+public class SirvoBotAutoGyroRamp extends LinearOpMode {
 
     //Define local members
-    HardwareSirvoBot robot = new HardwareSirvoBot();
+    private HardwareSirvoBot robot = new HardwareSirvoBot();
+
+    //Define variable
+    double maxTime = 30;
 
     //Code run in initialization
     @Override
@@ -68,13 +68,29 @@ public class SirvoBotAutonomous extends LinearOpMode {
         //Waits for driver to press play
         waitForStart();
 
-        //Start of the actual autonomous program, all your code to make the robot move goes here
-        robot.goForward(1, 1000);
-        robot.turnRight(135);
-        robot.goForward(1, 2000);
-        robot.stopMovement(0);
+        //Code run until driver presses stop
+        while (opModeIsActive()) {
 
-        //OpMode won't function without the code below this comment, so don't remove it
-        idle();
+            //Calibrate gyro
+            robot.gyroSensor.calibrate();
+
+            //Test if gyro is still calibrating
+            while (!isStopRequested() && robot.gyroSensor.isCalibrating()) {
+
+                //Make program idle until gyro is done calibrating
+                robot.waitTime(50);
+                idle();
+            }
+
+            //Display message that gyro is done calibrating
+            telemetry.addData("Gyro", "Done!");
+            telemetry.update();
+            robot.gyroSensor.resetZAxisIntegrator();
+
+            //Start of movement using gyro
+
+            //OpMode won't function without the code below this comment, so don't remove it
+            idle();
+        }
     }
 }

@@ -33,7 +33,11 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
 
 /**
  * This is a simple Autonomous program I put together to test the new hardware file, obviously some
@@ -42,9 +46,9 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
  * the hardware class. -Reece
  */
 
-@Autonomous(name="Zach's Autonomous Servo Test Progran", group="11904")
+@Autonomous(name="Autonomous by Time", group="11904")
 //@Disabled
-public class AutonomousSirvoBot extends LinearOpMode {
+public class SirvoBotAutoTime extends LinearOpMode {
 
     //Define local members
     HardwareSirvoBot robot = new HardwareSirvoBot();
@@ -64,14 +68,20 @@ public class AutonomousSirvoBot extends LinearOpMode {
         //Waits for driver to press play
         waitForStart();
 
-        //Start of the actual autonomous program, all your code to make the robot move goes here
-        robot.goForward(1, 2000);
-        robot.stopMovement(0);
-        robot.waitTime(5000);
-        robot.turnRight(180);
-        robot.goForward(1, 2000);
+        //Code run until driver presses stop
+        while (opModeIsActive()) {
 
-        //OpMode won't function without the code below this comment, so don't remove it
-        idle();
+            //Start of the actual autonomous program, all your code to make the mode move goes here
+            robot.goForward(1, 1000);
+            robot.turnRight(90);
+            robot.goForward(1, 2000);
+            robot.stopMovement(0);
+            robot.armForward(1, 500);
+            robot.waitTime(100);
+            robot.armBackward(1, 500);
+
+            //OpMode won't function without the code below this comment, so don't remove it
+            idle();
+        }
     }
 }

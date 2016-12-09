@@ -32,27 +32,25 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.util.Range;
-
-import org.firstinspires.ftc.robotcontroller.external.samples.HardwareK9bot;
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 /**
- * This is a simple TeleOp program I put together to test the new hardware file, obviously some
+ * This is a simple Autonomous program I put together to test the new hardware file, obviously some
  * adjustments will happen and this file may be replaced or overwritten and that is fine.
- * Take this file as a guideline or just guide to learn how to make a simple TeleOp that uses the
- * hardware class. -Reece
+ * Take this file as a guideline or just guide to learn how to make a simple Autonomous that uses
+ * the hardware class. -buttface
  */
 
-@TeleOp(name="BlackKnights: TeleOp", group="11904")
+@Autonomous(name="Autonomous by Gyro", group="11904")
 //@Disabled
-public class SirvoBotTeleOp extends LinearOpMode {
+public class SirvoBotAutoGyroZach extends LinearOpMode {
 
     //Define local members
-    HardwareSirvoBot robot = new HardwareSirvoBot();
+    private HardwareSirvoBot robot = new HardwareSirvoBot();
+
+    //Define variable
+    double maxTime = 30;
 
     //Code run in initialization
     @Override
@@ -61,7 +59,7 @@ public class SirvoBotTeleOp extends LinearOpMode {
         //Uses code from HardwareSirvoBot to map all the hardware for us
         robot.init(hardwareMap);
 
-        //Send message through telemetry
+        //Send messages through telemetry
         telemetry.addData("Status", "Initialization");
         telemetry.addData("Say", "Program is running!");
         telemetry.update();
@@ -72,45 +70,33 @@ public class SirvoBotTeleOp extends LinearOpMode {
         //Code run until driver presses stop
         while (opModeIsActive()) {
 
-            //Set variable
-            double robotSpeed = 1;
-            int speedVar = 1;
-            int i = 1;
-            telemetry.addData("Say", "Speed set to ", speedVar);
-            if (gamepad1.y == true) {
-                speedVar = ++i;
-                if (speedVar <= 3) {
-                    telemetry.addData("Say", "Speed set to ", speedVar);
-                } else {
-                    speedVar = 1;
-                }
+            //Calibrate gyro
+            robot.gyroSensor.calibrate();
+
+            //Test if gyro is still calibrating
+            while (!isStopRequested() && robot.gyroSensor.isCalibrating()) {
+
+                //Make program idle until gyro is done calibrating
+                robot.waitTime(50);
+                idle();
             }
 
-            //Set robot speeds based on speedVar
-            if (speedVar == 1) {
-                robotSpeed = 0.8;
-            } if (speedVar == 2) {
-                robotSpeed = 0.7;
-            } if (speedVar == 3) {
-                robotSpeed = 0.6;
-            }
-
-            //Set motor speed based on gamepad sticks
-            robot.leftMotor.setPower(-gamepad1.left_stick_y * robotSpeed + gamepad1.left_stick_x * 0.2);
-            robot.rightMotor.setPower(-gamepad1.right_stick_y * robotSpeed + -gamepad1.right_stick_x * 0.2);
-
-            /**
-             * All this telemetry code outputs of the right x and y axis and left x and y axis.
-             * The rest gives gives what speed variable you're in (essentially gear) and what percent
-             * of maximum speed you are going. -Reece
-             */
-            telemetry.addData("LS Y AXIS", -gamepad1.left_stick_y);
-            telemetry.addData("LS X AXIS", -gamepad1.left_stick_x);
-            telemetry.addData("RS Y AXIS", -gamepad1.right_stick_y);
-            telemetry.addData("RS X AXIS", -gamepad1.right_stick_x);
-            telemetry.addData("SPEED VARIABLE: ", speedVar);
-            telemetry.addData("ROBOT SPEED %: ", (robotSpeed + 0.2) * 10);
+            //Display message that gyro is done calibrating
+            telemetry.addData("Gyro", "Done!");
             telemetry.update();
+            robot.gyroSensor.resetZAxisIntegrator();
+
+            //Start of movement using gyro
+            robot.gyroDrive(1, 10, 0.0);
+            robot.gyroTurn(1, 45);
+            robot.gyroHold(1, 45, 50);
+            robot.gyroDrive(1, 10, 0.0);
+            robot.gyroTurn(1, 45);
+            robot.gyroHold(1, 45, 50);
+            robot.gyroDrive(1, 10, 0.0);
+            robot.gyroTurn(1, 270);
+            robot.gyroHold(1, 270, 50);
+            robot.gyroDrive(1, 10, 0.0);
 
             //OpMode won't function without the code below this comment, so don't remove it
             idle();
