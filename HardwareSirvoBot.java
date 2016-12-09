@@ -89,8 +89,8 @@ public class HardwareSirvoBot {
         sweeperMotor = hwMap.dcMotor.get("sweeper motor");
 
         // Set direction of motors
-        leftMotor.setDirection(DcMotor.Direction.FORWARD);
-        rightMotor.setDirection(DcMotor.Direction.REVERSE);
+        leftMotor.setDirection(DcMotor.Direction.REVERSE);
+        rightMotor.setDirection(DcMotor.Direction.FORWARD);
         sweeperMotor.setDirection(DcMotor.Direction.FORWARD);
 
         // Turn off motors

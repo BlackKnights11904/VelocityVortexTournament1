@@ -12,9 +12,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Basic autonomous encoder program. Duplicate this program to make actual ones.
  */
 
-@Autonomous(name="Autonomous Encoder", group="11904")
+@Autonomous(name="Autonomous 1: Knock cap ball", group="11904")
 //@Disabled
-public class SirvoBotAutoEncoder extends LinearOpMode {
+public class SirvoBotAutoKnockCapBall extends LinearOpMode {
 
     // Hook into hardware file
     HardwareSirvoBot robot = new HardwareSirvoBot();
@@ -58,8 +58,8 @@ public class SirvoBotAutoEncoder extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
-        // Use encoder drive method to drive a certain amount. Steps for program go here
-        encoderDrive(DRIVE_SPEED, 12, 12);
+        // Use encoder drive to move. Move robot 5ft 2in from corner vortex
+        encDrive(DRIVE_SPEED, 48, 48);
 
         // Add telemetry to signify the robot has reached it's destination
         telemetry.addLine("> Path complete");
@@ -67,7 +67,7 @@ public class SirvoBotAutoEncoder extends LinearOpMode {
     }
 
     // encoderDrive method. Drives using the motor's encoders
-    public void encoderDrive(double speed, double leftInches, double rightInches) {
+    public void encDrive(double speed, double leftInches, double rightInches) {
 
         // Create integers holding encoder count to reach destination
         int leftTarget;
@@ -116,5 +116,11 @@ public class SirvoBotAutoEncoder extends LinearOpMode {
 
             //robot.waitTime(250);
         }
+    }
+
+    // encTurn method, hopefully turns the robot accurately
+    public void encTurn(double speed, int angle) {
+
+        encDrive(speed, (angle / 4.35), -(angle / 4.35));
     }
 }
