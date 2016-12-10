@@ -11,9 +11,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Basic autonomous encoder program. Duplicate this program to make actual ones.
  */
 
-@Autonomous(name="Autonomous 2: Shoot and go up ramp", group="11904")
+@Autonomous(name="Autonomous 2: Shoot and go up ramp BLUE", group="11904")
 //@Disabled
-public class SirvoBotAutoShootAndGoUpRamp extends LinearOpMode {
+public class SirvoBotAutoShootAndGoUpRampBlue extends LinearOpMode {
 
     // Hook into hardware file
     HardwareSirvoBot robot = new HardwareSirvoBot();
@@ -62,7 +62,7 @@ public class SirvoBotAutoShootAndGoUpRamp extends LinearOpMode {
         encDrive(DRIVE_SPEED, 42, 42);
         encTurn(TURN_SPEED, 130);
         encDrive(DRIVE_SPEED, 52, 52);
-        robot.shootOutBalls(SHOOT_SPEED, 3);
+        robot.shootOutBalls(SHOOT_SPEED, 4);
 
         // Add telemetry to signify the robot has reached it's destination
         telemetry.addLine("> Path complete");
@@ -97,8 +97,7 @@ public class SirvoBotAutoShootAndGoUpRamp extends LinearOpMode {
             robot.rightMotor.setPower(Math.abs(speed));
 
             // Keep looping until timeout is over and motors are done moving
-//            while (opModeIsActive() && (runtime.seconds() < waitSec) && (robot.leftMotor.isBusy() && robot.rightMotor.isBusy())) {
-                while (opModeIsActive()  && (robot.leftMotor.isBusy() && robot.rightMotor.isBusy())) {
+            while (opModeIsActive()  && (robot.leftMotor.isBusy() && robot.rightMotor.isBusy())) {
 
                 // Display position and target to driver
                 telemetry.addData(">",  "Going to %7d :%7d", leftTarget, rightTarget);

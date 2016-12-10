@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -12,9 +11,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Basic autonomous encoder program. Duplicate this program to make actual ones.
  */
 
-@Autonomous(name="Autonomous Test Turn", group="11904")
-@Disabled
-public class SirvoBotAutoTestTurn extends LinearOpMode {
+@Autonomous(name="Autonomous 2: Shoot and go up ramp RED", group="11904")
+//@Disabled
+public class SirvoBotAutoShootAndGoUpRampRed extends LinearOpMode {
 
     // Hook into hardware file
     HardwareSirvoBot robot = new HardwareSirvoBot();
@@ -31,6 +30,7 @@ public class SirvoBotAutoTestTurn extends LinearOpMode {
     // Set speed variable for driving and turning
     static final double DRIVE_SPEED = 1;
     static final double TURN_SPEED = 0.8;
+    static final double SHOOT_SPEED = 1;
 
     @Override
     public void runOpMode() {
@@ -59,8 +59,10 @@ public class SirvoBotAutoTestTurn extends LinearOpMode {
         waitForStart();
 
         // Use encoder drive to move. Move robot 5ft 2in from corner vortex
-        encDrive(DRIVE_SPEED, 2, 2);
-        encTurn(TURN_SPEED, 360);
+        encDrive(DRIVE_SPEED, 42, 42);
+        encTurn(TURN_SPEED, -130);
+        encDrive(DRIVE_SPEED, 52, 52);
+        robot.shootOutBalls(SHOOT_SPEED, 4);
 
         // Add telemetry to signify the robot has reached it's destination
         telemetry.addLine("> Path complete");
@@ -95,8 +97,7 @@ public class SirvoBotAutoTestTurn extends LinearOpMode {
             robot.rightMotor.setPower(Math.abs(speed));
 
             // Keep looping until timeout is over and motors are done moving
-//            while (opModeIsActive() && (runtime.seconds() < waitSec) && (robot.leftMotor.isBusy() && robot.rightMotor.isBusy())) {
-                while (opModeIsActive()  && (robot.leftMotor.isBusy() && robot.rightMotor.isBusy())) {
+            while (opModeIsActive()  && (robot.leftMotor.isBusy() && robot.rightMotor.isBusy())) {
 
                 // Display position and target to driver
                 telemetry.addData(">",  "Going to %7d :%7d", leftTarget, rightTarget);

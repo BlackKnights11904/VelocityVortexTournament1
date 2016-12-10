@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Basic autonomous encoder program. Duplicate this program to make actual ones.
  */
 
-@Autonomous(name="Autonomous 1: Knock cap ball", group="11904")
+@Autonomous(name="Autonomous 1: Knock cap ball RED and BLUE", group="11904")
 //@Disabled
 public class SirvoBotAutoKnockCapBall extends LinearOpMode {
 
