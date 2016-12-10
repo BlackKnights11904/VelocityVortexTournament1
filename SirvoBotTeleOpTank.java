@@ -38,11 +38,8 @@ public class SirvoBotTeleOpTank extends LinearOpMode {
         while (opModeIsActive()) {
 
             // Tank controls using left and right sticks
-            //if (!gamepad1.dpad_right) {
-
-                robot.leftMotor.setPower(-gamepad1.left_stick_y * 1);
-                robot.rightMotor.setPower(-gamepad1.right_stick_y * 1);
-            //}
+            robot.leftMotor.setPower(-gamepad1.left_stick_y * 1);
+            robot.rightMotor.setPower(-gamepad1.right_stick_y * 1);
 
             // Use the sweeper with left and right bumpers, or up and down dpad
             if (gamepad1.right_bumper && !gamepad1.left_bumper && !gamepad1.dpad_up && !gamepad1.dpad_down) {
@@ -66,17 +63,6 @@ public class SirvoBotTeleOpTank extends LinearOpMode {
                 // Turn off sweeper motor
                 robot.sweeperMotor.setPower(0);
             }
-
-            // Push against beacons slowly to not damage the robot or wall
-            /*if (gamepad1.dpad_right) {
-
-                robot.leftMotor.setPower(-0.3);
-                robot.rightMotor.setPower(-0.3);
-            } if (!gamepad1.dpad_right && gamepad1.left_stick_y == 0 && gamepad1.right_stick_y == 0) {
-
-                robot.leftMotor.setPower(0);
-                robot.rightMotor.setPower(0);
-            }*/
 
             /**
              * All this telemetry code outputs of the right x and y axis and left x and y axis.
