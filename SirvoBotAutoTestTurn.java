@@ -60,10 +60,6 @@ public class SirvoBotAutoTestTurn extends LinearOpMode {
         // Use encoder drive to move. Move robot 5ft 2in from corner vortex
         encDrive(DRIVE_SPEED, 2, 2);
         encTurn(TURN_SPEED, 360);
-        sleep(1000);
-        encTurn(TURN_SPEED, -360);
-        sleep(1000);
-        encTurn(TURN_SPEED, 180);
 
         // Add telemetry to signify the robot has reached it's destination
         telemetry.addLine("> Path complete");
@@ -125,6 +121,6 @@ public class SirvoBotAutoTestTurn extends LinearOpMode {
     // encTurn method, hopefully turns the robot accurately
     public void encTurn(double speed, int angle) {
 
-        encDrive(speed, (angle / 4.35), -(angle / 4.35));
+        encDrive(speed, (angle / 4.75), -(angle / 4.75));
     }
 }

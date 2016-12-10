@@ -121,6 +121,6 @@ public class SirvoBotAutoKnockCapBall extends LinearOpMode {
     // encTurn method, hopefully turns the robot accurately
     public void encTurn(double speed, int angle) {
 
-        encDrive(speed, (angle / 4.35), -(angle / 4.35));
+        encDrive(speed, (angle / 4.75), -(angle / 4.75));
     }
 }

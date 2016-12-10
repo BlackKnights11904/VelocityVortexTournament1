@@ -58,12 +58,11 @@ public class SirvoBotAutoShootAndGoUpRamp extends LinearOpMode {
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
-        // Use encoder drive to move. Move robot FT' IN" from corner vortex
+        // Use encoder drive to move. Move robot 5ft 2in from corner vortex
         encDrive(DRIVE_SPEED, 42, 42);
-        encTurn(TURN_SPEED, 135);
-        encDrive(DRIVE_SPEED, 48, 48);
-        robot.shootOutBalls(SHOOT_SPEED, 1.5);
-        encDrive(DRIVE_SPEED, 18, 18);
+        encTurn(TURN_SPEED, 130);
+        encDrive(DRIVE_SPEED, 52, 52);
+        robot.shootOutBalls(SHOOT_SPEED, 3);
 
         // Add telemetry to signify the robot has reached it's destination
         telemetry.addLine("> Path complete");
@@ -125,6 +124,6 @@ public class SirvoBotAutoShootAndGoUpRamp extends LinearOpMode {
     // encTurn method, hopefully turns the robot accurately
     public void encTurn(double speed, int angle) {
 
-        encDrive(speed, (angle / 4.35), -(angle / 4.35));
+        encDrive(speed, (angle / 4.75), -(angle / 4.75));
     }
 }
